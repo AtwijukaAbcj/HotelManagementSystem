@@ -111,9 +111,11 @@
                                 <label class="col-sm-3 col-form-label">Payment Method: </label>
                                 <div class="col-sm-9">
                                     <select class="form-control" required name="transaction_type">
-                                        <option>cheque</option>
-                                        <option>cash</option>
-                                        <option>online transaction</option>
+                                        <option value="cash" @selected(old('transaction_type', $data->transaction_type ?? 'cash') === 'cash')>Cash</option>
+                                        <option value="card" @selected(old('transaction_type', $data->transaction_type ?? '') === 'card')>Card</option>
+                                        <option value="bank_transfer" @selected(old('transaction_type', $data->transaction_type ?? '') === 'bank_transfer')>Bank transfer</option>
+                                        <option value="mobile_money" @selected(old('transaction_type', $data->transaction_type ?? '') === 'mobile_money')>Mobile money</option>
+                                        <option value="online" @selected(old('transaction_type', $data->transaction_type ?? '') === 'online')>Online</option>
                                     </select>
                                 </div>
                             </div>

@@ -117,8 +117,11 @@ Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index
 Route::get('/payments', [FinanceController::class, 'payments'])->name('payments.index');
 Route::post('/payments', [FinanceController::class, 'storePayment'])->name('payments.store');
 Route::get('/invoices', [FinanceController::class, 'invoices'])->name('invoices.index');
+Route::get('/invoices/create', [FinanceController::class, 'createInvoice'])->name('invoices.create');
+Route::get('/invoices/{invoice}/print', [FinanceController::class, 'printInvoice'])->name('invoices.print');
 Route::post('/invoices', [FinanceController::class, 'storeInvoice'])->name('invoices.store');
 Route::get('/expenses', [FinanceController::class, 'expenses'])->name('expenses.index');
+Route::get('/expenses/create', [FinanceController::class, 'createExpense'])->name('expenses.create');
 Route::post('/expenses', [FinanceController::class, 'storeExpense'])->name('expenses.store');
 
 Route::get('/housekeeping', [OperationsController::class, 'housekeeping'])->name('housekeeping.index');

@@ -18,53 +18,17 @@
                     <h3 class="page-title mb-1">Invoices</h3>
                     <p class="text-muted mb-0">Issue and track guest billing records.</p>
                 </div>
+                <a href="{{ route('invoices.create') }}" class="btn btn-primary"><i class="fas fa-plus mr-1"></i> Add invoice</a>
             </div>
 
-            <div class="card shadow-sm border-0 rounded-20 mb-4">
-                <div class="card-body">
-                    <form method="POST" action="{{ route('invoices.store') }}">
-                        @csrf
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">Guest name</label>
-                                <input type="text" name="guest_name" class="form-control" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Invoice number</label>
-                                <input type="text" name="invoice_number" class="form-control" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Amount</label>
-                                <input type="number" step="0.01" name="amount" class="form-control" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Status</label>
-                                <select name="status" class="form-control">
-                                    <option value="paid">Paid</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="overdue">Overdue</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Payment method</label>
-                                <input type="text" name="payment_method" class="form-control" value="cash">
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Notes</label>
-                                <textarea name="notes" rows="3" class="form-control"></textarea>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">Save invoice</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            @if (session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
 
-            <div class="card shadow-sm border-0 rounded-20">
+            <div class="card">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table class="table table-hover align-middle mb-0">
                             <thead class="thead-light">
                                 <tr>
                                     <th>Guest</th>
@@ -72,6 +36,8 @@
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Method</th>
+                                    <th>Recorded</th>
+                                    <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,12 +46,14 @@
                                         <td>{{ $invoice->guest_name }}</td>
                                         <td>{{ $invoice->invoice_number }}</td>
                                         <td>${{ number_format($invoice->amount, 2) }}</td>
-                                        <td>{{ ucfirst($invoice->status) }}</td>
-                                        <td>{{ $invoice->payment_method }}</td>
+                                        <td><span class="badge badge-{{ $invoice->status === 'paid' ? 'success' : ($invoice->status === 'overdue' ? 'danger' : 'warning') }}">{{ ucfirst($invoice->status) }}</span></td>
+                                        <td><span class="badge badge-light text-capitalize">{{ str_replace('_', ' ', $invoice->payment_method) }}</span></td>
+                                        <td class="text-muted">{{ $invoice->created_at->format('d M Y') }}</td>
+                                        <td class="text-right"><a href="{{ route('invoices.print', $invoice) }}" target="_blank" class="btn btn-sm btn-outline-primary" title="Print invoice"><i class="fas fa-print mr-1"></i> Print</a></td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">No invoices recorded.</td>
+                                        <td colspan="7" class="text-center text-muted py-5"><i class="fas fa-file-invoice-dollar fa-2x mb-3 text-primary"></i><br>No invoices recorded.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

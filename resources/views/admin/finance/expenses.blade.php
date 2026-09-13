@@ -18,51 +18,24 @@
                     <h3 class="page-title mb-1">Expenses</h3>
                     <p class="text-muted mb-0">Track operating costs and supplier payments.</p>
                 </div>
+                <a href="{{ route('expenses.create') }}" class="btn btn-primary"><i class="fas fa-plus mr-1"></i> Add expense</a>
             </div>
 
-            <div class="card shadow-sm border-0 rounded-20 mb-4">
-                <div class="card-body">
-                    <form method="POST" action="{{ route('expenses.store') }}">
-                        @csrf
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label">Title</label>
-                                <input type="text" name="title" class="form-control" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Category</label>
-                                <input type="text" name="category" class="form-control" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Amount</label>
-                                <input type="number" step="0.01" name="amount" class="form-control" required>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label">Payment method</label>
-                                <input type="text" name="payment_method" class="form-control" value="cash">
-                            </div>
-                            <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">Save expense</button>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label">Notes</label>
-                                <textarea name="notes" rows="3" class="form-control"></textarea>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            @if (session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+            @endif
 
-            <div class="card shadow-sm border-0 rounded-20">
+            <div class="card">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table class="table table-hover align-middle mb-0">
                             <thead class="thead-light">
                                 <tr>
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Amount</th>
                                     <th>Method</th>
+                                    <th>Recorded</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,11 +44,12 @@
                                         <td>{{ $expense->title }}</td>
                                         <td>{{ $expense->category }}</td>
                                         <td>${{ number_format($expense->amount, 2) }}</td>
-                                        <td>{{ $expense->payment_method }}</td>
+                                        <td><span class="badge badge-light text-capitalize">{{ str_replace('_', ' ', $expense->payment_method) }}</span></td>
+                                        <td class="text-muted">{{ $expense->created_at->format('d M Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted py-4">No expenses recorded.</td>
+                                        <td colspan="5" class="text-center text-muted py-5"><i class="fas fa-receipt fa-2x mb-3 text-primary"></i><br>No expenses recorded.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

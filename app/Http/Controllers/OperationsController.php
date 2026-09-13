@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\HousekeepingTask;
 use App\Models\MaintenanceRequest;
 use App\Models\addrooms;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OperationsController extends Controller
@@ -13,16 +14,18 @@ class OperationsController extends Controller
     {
         $tasks = HousekeepingTask::with('room')->latest()->get();
         $rooms = addrooms::orderBy('room_number')->get();
+        $employees = User::where('role', '!=', 'admin')->orderBy('name')->get(['name']);
 
-        return view('admin.operations.housekeeping', compact('tasks', 'rooms'));
+        return view('admin.operations.housekeeping', compact('tasks', 'rooms', 'employees'));
     }
 
     public function maintenance()
     {
         $requests = MaintenanceRequest::with('room')->latest()->get();
         $rooms = addrooms::orderBy('room_number')->get();
+        $employees = User::where('role', '!=', 'admin')->orderBy('name')->get(['name']);
 
-        return view('admin.operations.maintenance', compact('requests', 'rooms'));
+        return view('admin.operations.maintenance', compact('requests', 'rooms', 'employees'));
     }
 
     public function storeHousekeeping(Request $request)

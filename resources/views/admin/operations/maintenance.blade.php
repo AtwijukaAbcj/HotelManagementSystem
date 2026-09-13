@@ -81,7 +81,12 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Assigned to</label>
-                                            <input type="text" name="assigned_to" class="form-control">
+                                            <select name="assigned_to" class="form-control">
+                                                <option value="">Unassigned</option>
+                                                @foreach ($employees as $employee)
+                                                    <option value="{{ $employee->name }}">{{ $employee->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

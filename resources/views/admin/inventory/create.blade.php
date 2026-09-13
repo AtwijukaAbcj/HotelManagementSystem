@@ -63,7 +63,12 @@
                             </div>
                             <div class="col-md-6 col-lg-4 form-group">
                                 <label for="supplier">Supplier</label>
-                                <input id="supplier" type="text" name="supplier" class="form-control" value="{{ old('supplier') }}">
+                                <select id="supplier" name="supplier" class="form-control">
+                                    <option value="">No supplier</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->name }}" @selected(old('supplier') === $supplier->name)>{{ $supplier->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-6 col-lg-4 form-group">
                                 <label for="status">Status</label>

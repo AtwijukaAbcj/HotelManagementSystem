@@ -42,11 +42,23 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Task type</label>
-                                    <input type="text" name="task_type" class="form-control" placeholder="Vacuum, restock, deep clean..." required>
+                                    <select name="task_type" class="form-control" required>
+                                        <option value="">Select task type</option>
+                                        <option>Room cleaning</option>
+                                        <option>Deep cleaning</option>
+                                        <option>Linen change</option>
+                                        <option>Restock amenities</option>
+                                        <option>Inspection</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Assigned to</label>
-                                    <input type="text" name="assignee" class="form-control" required>
+                                    <select name="assignee" class="form-control" required>
+                                        <option value="">Select employee</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{ $employee->name }}">{{ $employee->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">

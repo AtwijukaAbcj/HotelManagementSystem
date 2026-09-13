@@ -27,10 +27,25 @@ class FinanceController extends Controller
         return view('admin.finance.invoices', compact('invoices'));
     }
 
+    public function createInvoice()
+    {
+        return view('admin.finance.invoice-create');
+    }
+
+    public function printInvoice(Invoice $invoice)
+    {
+        return view('admin.finance.invoice-print', compact('invoice'));
+    }
+
     public function expenses()
     {
         $expenses = Expense::latest()->get();
         return view('admin.finance.expenses', compact('expenses'));
+    }
+
+    public function createExpense()
+    {
+        return view('admin.finance.expense-create');
     }
 
     public function payments()
@@ -78,7 +93,7 @@ class FinanceController extends Controller
             'invoice_number' => 'required|string|max:80|unique:invoices,invoice_number',
             'amount' => 'required|numeric|min:0',
             'status' => 'required|in:paid,pending,overdue',
-            'payment_method' => 'required|string|max:40',
+            'payment_method' => 'required|in:cash,card,bank_transfer,mobile_money,online',
             'notes' => 'nullable|string',
         ]);
 
@@ -93,7 +108,7 @@ class FinanceController extends Controller
             'title' => 'required|string|max:150',
             'category' => 'required|string|max:80',
             'amount' => 'required|numeric|min:0',
-            'payment_method' => 'required|string|max:40',
+            'payment_method' => 'required|in:cash,card,bank_transfer,mobile_money,online',
             'notes' => 'nullable|string',
         ]);
 

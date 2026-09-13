@@ -22,12 +22,16 @@ class InventoryController extends Controller
 
     public function create()
     {
-        return view('admin.inventory.create');
+        $suppliers = Supplier::where('status', 'active')->orderBy('name')->get(['name']);
+
+        return view('admin.inventory.create', compact('suppliers'));
     }
 
     public function edit(InventoryItem $item)
     {
-        return view('admin.inventory.edit', compact('item'));
+        $suppliers = Supplier::where('status', 'active')->orderBy('name')->get(['name']);
+
+        return view('admin.inventory.edit', compact('item', 'suppliers'));
     }
 
     public function update(Request $request, InventoryItem $item)

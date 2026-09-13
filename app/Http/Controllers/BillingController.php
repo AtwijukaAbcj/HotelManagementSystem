@@ -46,6 +46,9 @@ class BillingController extends Controller
 
     public function savebill(Request $request)
     {
+        $request->validate([
+            'transaction_type' => 'required|in:cash,card,bank_transfer,mobile_money,online',
+        ]);
 
         // Create a new new instance and set the values from the form
         $data = new billing;
@@ -89,6 +92,10 @@ class BillingController extends Controller
 
     public function update_billdata_confirm(Request $request, $id)
     {
+        $request->validate([
+            'transaction_type' => 'required|in:cash,card,bank_transfer,mobile_money,online',
+        ]);
+
         $data = billing::find($id);
         
         $data->name = $request->input('name');
