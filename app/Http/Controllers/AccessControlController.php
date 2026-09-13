@@ -11,6 +11,7 @@ use App\Models\SecurityAlert;
 use App\Models\Stay;
 use App\Models\User;
 use App\Models\addrooms;
+use App\Services\ModulePermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -35,16 +36,8 @@ class AccessControlController extends Controller
             ['key' => 'reports', 'icon' => 'fa-chart-line', 'title' => 'Access Reports', 'description' => 'Generate security and card activity reports.', 'count' => null, 'label' => 'Open reports', 'route' => route('access-control.reports.index'), 'ability' => 'reports'],
             ['key' => 'settings', 'icon' => 'fa-sliders', 'title' => 'Access Control Settings', 'description' => 'Configure expiry, access rules, and policies.', 'count' => null, 'label' => 'Configure', 'route' => route('access-control.settings.index'), 'ability' => 'manage'],
         ];
-        $role = strtolower((string) auth()->user()->role);
-        $modules = array_values(array_filter($modules, function (array $module) use ($role): bool {
-            return match ($module['ability']) {
-                'guest-cards' => in_array($role, ['admin', 'manager', 'security_manager', 'reception'], true),
-                'employee-cards' => in_array($role, ['admin', 'manager', 'security_manager', 'hr'], true),
-                'events', 'reports' => in_array($role, ['admin', 'manager', 'security_manager', 'auditor'], true),
-                'manage' => in_array($role, ['admin', 'security_manager'], true),
-                default => false,
-            };
-        }));
+        $permissionService = app(ModulePermissionService::class);
+        $modules = array_values(array_filter($modules, fn (array $module): bool => $permissionService->can(auth()->user(), 'access-control', $module['ability'])));
         $recentAlerts = SecurityAlert::with(['card', 'assignee'])->latest()->limit(5)->get();
         $recentEvents = AccessLog::with(['card', 'guest', 'user', 'room'])->latest('accessed_at')->limit(8)->get();
 

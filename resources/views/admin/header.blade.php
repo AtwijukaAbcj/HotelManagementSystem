@@ -73,6 +73,20 @@
 				<div class="topnav-dropdown-footer"> <a href="#">View all Notifications</a> </div>
 			</div>
 		</li> -->
+		@if(auth()->check() && strtolower((string) auth()->user()->role) === 'admin')
+		<li class="nav-item dropdown has-arrow">
+			<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" aria-label="Settings" title="Settings"><i class="fas fa-cog" aria-hidden="true"></i></a>
+			<div class="dropdown-menu dropdown-menu-right">
+				<a class="dropdown-item" href="{{ route('admin.roles') }}"><i class="fas fa-users-cog mr-2"></i> Roles</a>
+				<a class="dropdown-item" href="{{ route('admin.users') }}"><i class="fas fa-users mr-2"></i> Users</a>
+				<a class="dropdown-item" href="{{ route('admin.roles.permissions') }}"><i class="fas fa-shield-alt mr-2"></i> Module permissions</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="{{ route('properties.index') }}"><i class="fas fa-building mr-2"></i> Properties</a>
+				<a class="dropdown-item" href="{{ route('notifications.index') }}"><i class="fas fa-bell mr-2"></i> Notifications</a>
+				<a class="dropdown-item" href="{{ route('audit-logs.index') }}"><i class="fas fa-history mr-2"></i> Audit logs</a>
+			</div>
+		</li>
+		@endif
 		<li class="nav-item dropdown has-arrow">
 			<a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"> <span class="user-img"><img class="rounded-circle" src=" {{ URL::to('admin/assets/img/logo-hotel.png')}}" width="31" alt="Hotel XYZ"></span> </a>
 			<div class="dropdown-menu">

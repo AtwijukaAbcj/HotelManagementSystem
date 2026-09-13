@@ -42,8 +42,12 @@ Route::middleware([
 Route::middleware('auth')->group(function () {
 
 Route::middleware('admin')->group(function () {
-    Route::get('/admin/roles', [RoleController::class, 'index'])->name('admin.roles');
-    Route::put('/admin/roles/{user}', [RoleController::class, 'update'])->name('admin.roles.update');
+    Route::get('/role-management', [RoleController::class, 'index'])->name('admin.roles');
+    Route::post('/role-management', [RoleController::class, 'store'])->name('admin.roles.store');
+    Route::get('/user-management', [RoleController::class, 'users'])->name('admin.users');
+    Route::put('/user-management/{user}/role', [RoleController::class, 'update'])->name('admin.roles.update');
+    Route::get('/role-management/permissions', [RoleController::class, 'permissions'])->name('admin.roles.permissions');
+    Route::put('/role-management/permissions/{role}', [RoleController::class, 'updatePermissions'])->name('admin.roles.permissions.update');
 
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');

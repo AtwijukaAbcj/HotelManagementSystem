@@ -1,0 +1,36 @@
+<?php
+
+return [
+    'roles' => ['admin', 'manager', 'security_manager', 'reception', 'hr', 'housekeeping', 'finance', 'inventory', 'maintenance', 'auditor'],
+    'modules' => [
+        'dashboard' => 'Dashboard',
+        'bookings' => 'Bookings',
+        'rooms' => 'Rooms',
+        'guests' => 'Guests',
+        'properties' => 'Properties',
+        'notifications' => 'Notifications',
+        'access-control' => 'Access Control',
+        'pos' => 'Restaurant / Bar POS',
+        'inventory' => 'Inventory',
+        'suppliers' => 'Suppliers',
+        'purchases' => 'Purchases',
+        'operations' => 'Housekeeping & Maintenance',
+        'attendance' => 'Attendance',
+        'employees' => 'Employees',
+        'finance' => 'Finance',
+        'reports' => 'Reports',
+    ],
+    'actions' => ['view', 'create', 'edit', 'delete', 'guest-cards', 'employee-cards', 'events', 'reports', 'manage'],
+    'defaults' => [
+        'admin' => ['*' => ['view', 'create', 'edit', 'delete']],
+        'manager' => ['dashboard' => ['view'], 'bookings' => ['view', 'create', 'edit'], 'rooms' => ['view', 'edit'], 'guests' => ['view', 'create', 'edit'], 'properties' => ['view'], 'notifications' => ['view', 'create'], 'access-control' => ['view', 'guest-cards', 'employee-cards', 'events', 'reports'], 'finance' => ['view'], 'reports' => ['view']],
+        'security_manager' => ['dashboard' => ['view'], 'access-control' => ['view', 'guest-cards', 'employee-cards', 'events', 'reports', 'manage'], 'reports' => ['view']],
+        'reception' => ['dashboard' => ['view'], 'bookings' => ['view', 'create', 'edit'], 'rooms' => ['view'], 'guests' => ['view', 'create', 'edit'], 'access-control' => ['view', 'guest-cards']],
+        'hr' => ['dashboard' => ['view'], 'employees' => ['view', 'create', 'edit'], 'access-control' => ['view', 'employee-cards']],
+        'housekeeping' => ['dashboard' => ['view'], 'rooms' => ['view'], 'operations' => ['view', 'create', 'edit']],
+        'finance' => ['dashboard' => ['view'], 'finance' => ['view', 'create', 'edit'], 'reports' => ['view']],
+        'inventory' => ['dashboard' => ['view'], 'inventory' => ['view', 'create', 'edit'], 'suppliers' => ['view', 'create', 'edit'], 'purchases' => ['view', 'create', 'edit']],
+        'maintenance' => ['dashboard' => ['view'], 'rooms' => ['view'], 'operations' => ['view', 'create', 'edit']],
+        'auditor' => ['dashboard' => ['view'], 'reports' => ['view'], 'access-control' => ['view', 'events', 'reports']],
+    ],
+];

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Role Management</title>
+    <title>Roles</title>
     @include('admin.css')
     <style>
         .roles-page { background: #f6f8fb; min-height: 100vh; }
@@ -19,10 +19,11 @@
     @include('admin.header')
     @include('admin.sidebar')
     <div class="page-wrapper"><main class="roles-container">
-        <div class="mb-4"><h3 class="page-title mb-1">Role Management</h3><p class="text-muted mb-0">Control access to hotel operations by assigning staff roles.</p></div>
+        <div class="mb-4 d-flex align-items-start justify-content-between" style="gap:16px"><div><h3 class="page-title mb-1">Roles</h3><p class="text-muted mb-0">Create roles and configure their access to system modules.</p></div><div><a href="{{ route('admin.users') }}" class="btn btn-outline-secondary mr-2">Users</a><a href="{{ route('admin.roles.permissions') }}" class="btn btn-outline-primary">Module permissions</a></div></div>
         @if(session('message'))<div class="alert alert-success roles-card">{{ session('message') }}</div>@endif
         @if($errors->any())<div class="alert alert-danger roles-card"><ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-        <div class="card roles-card"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="thead-light"><tr><th>User</th><th>Email</th><th>Current role</th><th>Access level</th><th>Update role</th></tr></thead><tbody>@forelse($users as $user)<tr><td class="font-weight-bold">{{ $user->name }}</td><td>{{ $user->email }}</td><td><span class="role-badge">{{ ucfirst($user->role ?: 'reception') }}</span></td><td>{{ $user->role === 'admin' ? 'Full access' : 'Operational access' }}</td><td><form method="POST" action="{{ route('admin.roles.update', $user) }}" class="d-flex" style="gap:8px">@csrf @method('PUT')<select name="role" class="form-control form-control-sm" style="max-width:170px">@foreach($roles as $role)<option value="{{ $role }}" @selected($user->role === $role)>{{ ucfirst($role) }}</option>@endforeach</select><button class="btn btn-sm btn-outline-primary" type="submit">Save</button></form></td></tr>@empty<tr><td colspan="5" class="text-center text-muted py-5">No users found.</td></tr>@endforelse</tbody></table></div>@if($users->hasPages())<div class="p-3">{{ $users->links() }}</div>@endif</div></div>
+        <div class="card roles-card mb-4"><div class="card-body"><h5 class="mb-3">Create a role</h5><form method="POST" action="{{ route('admin.roles.store') }}" class="form-row align-items-end">@csrf<div class="col-md-5"><label for="role-name">Role name</label><input id="role-name" name="name" class="form-control" placeholder="spa_manager" required maxlength="50"></div><div class="col-md-auto"><button class="btn btn-primary" type="submit">Create role</button></div></form></div></div>
+        <div class="card roles-card"><div class="card-body p-0"><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="thead-light"><tr><th>Role</th><th>Users assigned</th><th>Access configuration</th></tr></thead><tbody>@foreach($roles as $role)<tr><td><span class="role-badge">{{ ucfirst(str_replace('_', ' ', $role)) }}</span></td><td>{{ $roleCounts[$role] ?? 0 }}</td><td><a href="{{ route('admin.roles.permissions') }}#{{ $role }}" class="btn btn-sm btn-outline-primary">Configure permissions</a></td></tr>@endforeach</tbody></table></div></div></div>
     </main></div>
 </div>
 @include('admin.script')

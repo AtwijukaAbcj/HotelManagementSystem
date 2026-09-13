@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\AccessCard;
 use App\Models\Guest;
+use App\Models\RolePermission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
@@ -58,5 +59,21 @@ class AccessControlTest extends TestCase
         ]);
 
         $this->actingAs($frontDesk)->get(route('access-control.employee-cards.index'))->assertForbidden();
+    }
+
+    public function test_role_permission_override_controls_access_control_abilities(): void
+    {
+        $manager = User::factory()->create(['role' => 'manager', 'usertype' => '0']);
+
+        $this->actingAs($manager)->get(route('access-control.access-points.index'))->assertForbidden();
+
+        RolePermission::create([
+            'role' => 'manager',
+            'module' => 'access-control',
+            'action' => 'manage',
+            'allowed' => true,
+        ]);
+
+        $this->actingAs($manager)->get(route('access-control.access-points.index'))->assertOk();
     }
 }
