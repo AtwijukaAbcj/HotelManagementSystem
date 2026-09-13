@@ -29,11 +29,9 @@ class BillingController extends Controller
         // $bookingData = Booking::select('name', 'room_type', 'room_number')->first();
 
         $latestBooking = Booking::orderBy('created_at', 'desc')->first();
-
-        // Calculate the stay days
-        $arrivalDate = Carbon::parse($latestBooking->arrival_date);
-        $departureDate = Carbon::parse($latestBooking->departure_date);
-        $stayDays = $arrivalDate->diffInDays($departureDate);
+        $stayDays = $latestBooking
+            ? Carbon::parse($latestBooking->arrival_date)->diffInDays(Carbon::parse($latestBooking->departure_date))
+            : null;
 
 
         // Pass the data to the billing view
@@ -86,7 +84,7 @@ class BillingController extends Controller
 
     public function updatebillrecord($id)
     {
-        $data = billing::find($id);
+        $data = billing::findOrFail($id);
         return view('admin.billing.billing', compact('data'));
     }
 

@@ -36,8 +36,9 @@
 
 
 
-                <form action="{{url ('/savebill')}}" method="POST">
+                <form action="{{ isset($data) ? url('/update_billdata_confirm/' . $data->id) : url('/savebill') }}" method="POST">
                     @csrf
+                    @if(isset($data)) @method('PUT') @endif
                     <div class="row">
                         <div class="col-md-6">
 
@@ -46,21 +47,21 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Name:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" required name="name" value="{{ $latestBooking->name }}">
+                                    <input type="text" class="form-control" required name="name" value="{{ old('name', $data->name ?? $latestBooking->name ?? '') }}">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Room Type:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" required name="room_type" value="{{ $latestBooking->room_type }}">
+                                    <input type="text" class="form-control" required name="room_type" value="{{ old('room_type', $data->room_type ?? $latestBooking->room_type ?? '') }}">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Room Number:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" required name="room_number" value="{{ $latestBooking->room_number }}">
+                                    <input type="text" class="form-control" required name="room_number" value="{{ old('room_number', $data->room_number ?? $latestBooking->room_number ?? '') }}">
                                 </div>
                             </div>
 
@@ -72,20 +73,20 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Billing Date:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control datetimepicker" required name="billing_date">
+                                    <input type="text" class="form-control datetimepicker" required name="billing_date" value="{{ old('billing_date', $data->billing_date ?? '') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Time:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control datetimepicker3" required id="datetimepicker3" name="billing_time">
+                                    <input type="text" class="form-control datetimepicker3" required id="datetimepicker3" name="billing_time" value="{{ old('billing_time', $data->billing_time ?? '') }}">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">No. of Stay Days:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" required id="no_of_days_stay" name="no_of_days_stay" value="{{ isset($stayDays) ? $stayDays : '' }}">
+                                    <input type="number" class="form-control" required id="no_of_days_stay" name="no_of_days_stay" value="{{ old('no_of_days_stay', $data->no_of_days_stay ?? $stayDays ?? '') }}">
                                 </div>
                             </div>
 
@@ -93,7 +94,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">Price of Room:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" class="form-control" required id="price" name="price">
+                                    <input type="number" class="form-control" required id="price" name="price" value="{{ old('price', $data->price ?? '') }}">
                                 </div>
                             </div>
 
