@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('housekeeping_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained('addrooms')->cascadeOnDelete();
+            $table->unsignedInteger('room_id');
             $table->string('task_type', 100);
             $table->string('assignee', 100);
             $table->string('priority', 20)->default('normal');
@@ -18,11 +18,12 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->index(['status', 'priority']);
+            $table->foreign('room_id')->references('id')->on('addrooms')->cascadeOnDelete();
         });
 
         Schema::create('maintenance_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('room_id')->constrained('addrooms')->cascadeOnDelete();
+            $table->unsignedInteger('room_id');
             $table->string('title', 150);
             $table->text('description');
             $table->string('priority', 20)->default('normal');
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->string('assigned_to', 100)->nullable();
             $table->timestamps();
             $table->index(['status', 'priority']);
+            $table->foreign('room_id')->references('id')->on('addrooms')->cascadeOnDelete();
         });
     }
 

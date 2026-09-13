@@ -40,7 +40,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->nullable()->constrained('properties')->nullOnDelete();
             $table->foreignId('guest_id')->constrained('guests')->cascadeOnDelete();
-            $table->foreignId('room_id')->constrained('addrooms')->restrictOnDelete();
+            $table->unsignedInteger('room_id');
+            $table->foreign('room_id')->references('id')->on('addrooms')->restrictOnDelete();
             $table->foreignId('booking_id')->nullable()->constrained('bookings')->nullOnDelete();
             $table->date('arrival_date');
             $table->date('departure_date');
