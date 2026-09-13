@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <table class="table mb-4">
+            <table class="table mb-4 no-datatable">
                 <thead>
                     <tr><th>Description</th><th class="text-right">Amount</th></tr>
                 </thead>

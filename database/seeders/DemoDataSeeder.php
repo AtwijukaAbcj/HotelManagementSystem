@@ -203,5 +203,36 @@ class DemoDataSeeder extends Seeder
         if (Schema::hasTable('audit_logs')) {
             DB::table('audit_logs')->updateOrInsert(['event' => 'demo.seeded', 'user_id' => $admin], ['property_id' => $property, 'old_values' => null, 'new_values' => json_encode(['source' => 'DemoDataSeeder']), 'ip_address' => '127.0.0.1', 'updated_at' => $now, 'created_at' => $now]);
         }
+
+        if (Schema::hasTable('access_cards') && Schema::hasTable('access_logs')) {
+            $guestId = Schema::hasTable('guests') ? DB::table('guests')->where('email', 'priya.mehta@example.com')->value('id') : null;
+            $roomId = Schema::hasTable('addrooms') ? DB::table('addrooms')->where('room_number', '203')->value('id') : null;
+            DB::table('access_cards')->updateOrInsert(['card_number' => 'GUEST-DEMO-001'], ['card_type' => 'guest_card', 'guest_id' => $guestId, 'status' => 'active', 'issued_at' => $now->copy()->subDays(2), 'expires_at' => $now->copy()->addDays(1), 'notes' => 'Demo guest room card', 'updated_at' => $now, 'created_at' => $now]);
+            DB::table('access_cards')->updateOrInsert(['card_number' => 'STAFF-DEMO-001'], ['card_type' => 'employee_mastercard', 'user_id' => $staff, 'status' => 'active', 'issued_at' => $now->copy()->subMonths(2), 'notes' => 'Demo employee Mastercard', 'updated_at' => $now, 'created_at' => $now]);
+            $guestCard = DB::table('access_cards')->where('card_number', 'GUEST-DEMO-001')->value('id');
+            $staffCard = DB::table('access_cards')->where('card_number', 'STAFF-DEMO-001')->value('id');
+            DB::table('access_logs')->updateOrInsert(['access_card_id' => $guestCard, 'access_point' => 'Room 203 reader', 'accessed_at' => $now->copy()->subHours(3)], ['guest_id' => $guestId, 'room_id' => $roomId, 'area' => 'Guest room', 'event_type' => 'entry', 'result' => 'granted', 'reason' => null, 'updated_at' => $now, 'created_at' => $now]);
+            DB::table('access_logs')->updateOrInsert(['access_card_id' => $staffCard, 'access_point' => 'Control room reader', 'accessed_at' => $now->copy()->subHour()], ['user_id' => $staff, 'area' => 'Control room', 'event_type' => 'entry', 'result' => 'granted', 'reason' => null, 'updated_at' => $now, 'created_at' => $now]);
+        }
+
+        if (Schema::hasTable('access_points')) {
+            foreach ([
+                ['name' => 'Main lobby reader', 'area' => 'Lobby', 'device_type' => 'Card reader', 'status' => 'online'],
+                ['name' => 'Room 203 reader', 'area' => 'Guest room', 'device_type' => 'Door controller', 'status' => 'online'],
+                ['name' => 'Control room reader', 'area' => 'Control room', 'device_type' => 'Card reader', 'status' => 'offline'],
+            ] as $point) {
+                DB::table('access_points')->updateOrInsert(['name' => $point['name']], array_merge($point, ['last_communication' => $point['status'] === 'online' ? $now : $now->copy()->subHour(), 'is_enabled' => true, 'updated_at' => $now, 'created_at' => $now]));
+            }
+        }
+
+        if (Schema::hasTable('restricted_areas')) {
+            foreach ([
+                ['name' => 'Control room', 'description' => 'Security monitoring and administration.', 'severity' => 'critical'],
+                ['name' => 'Server room', 'description' => 'Infrastructure and network equipment.', 'severity' => 'critical'],
+                ['name' => 'Staff only', 'description' => 'Back-of-house staff areas.', 'severity' => 'high'],
+            ] as $area) {
+                DB::table('restricted_areas')->updateOrInsert(['name' => $area['name']], array_merge($area, ['is_active' => true, 'updated_at' => $now, 'created_at' => $now]));
+            }
+        }
     }
 }

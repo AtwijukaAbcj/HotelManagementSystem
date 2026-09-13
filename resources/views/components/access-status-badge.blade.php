@@ -1,0 +1,3 @@
+@props(['status'])
+@php($tone = match(strtolower(str_replace(' ', '_', $status))) { 'active', 'granted', 'online', 'resolved' => 'bg-emerald-50 text-emerald-700 ring-emerald-600/20', 'denied', 'blocked', 'critical', 'offline' => 'bg-red-50 text-red-700 ring-red-600/20', 'warning', 'investigating', 'expiring_soon' => 'bg-amber-50 text-amber-700 ring-amber-600/20', 'inactive', 'expired', 'disabled', 'suspended' => 'bg-slate-100 text-slate-600 ring-slate-500/20', default => 'bg-blue-50 text-blue-700 ring-blue-600/20' })
+<span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold {{ $tone }} ring-1 ring-inset"><span class="h-1.5 w-1.5 rounded-full bg-current"></span>{{ ucwords(str_replace('_', ' ', $status)) }}</span>

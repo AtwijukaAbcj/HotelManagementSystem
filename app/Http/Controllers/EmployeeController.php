@@ -13,6 +13,7 @@ class EmployeeController extends Controller
     public function listemployees(Request $request)
     {
         $search = trim($request->input('search', ''));
+        $role = $request->input('role', '');
 
         $employees = User::query()
             ->when($search !== '', function ($query) use ($search) {
@@ -21,10 +22,13 @@ class EmployeeController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
+            ->when($role !== '', function ($query) use ($role) {
+                $query->where('role', $role);
+            })
             ->orderBy('name')
             ->get();
 
-        return view('admin.employee.employeeslist', compact('employees', 'search'));
+        return view('admin.employee.employeeslist', compact('employees', 'search', 'role'));
     }
 
     public function leave()

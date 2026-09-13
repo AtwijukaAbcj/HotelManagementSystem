@@ -1,0 +1,5 @@
+@props(['module'])
+<a href="{{ $module['route'] }}" class="group flex min-h-44 flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-teal-400 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+    <div class="flex items-start justify-between"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-teal-50 text-teal-700"><i class="fas {{ $module['icon'] }}"></i></span><svg class="h-5 w-5 text-slate-300 transition group-hover:text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    <div><h2 class="mt-5 font-bold text-slate-900">{{ $module['title'] }}</h2><p class="mt-1 text-sm leading-5 text-slate-500">{{ $module['description'] }}</p>@if($module['count'] !== null)<p class="mt-3 text-xs font-semibold text-teal-700">{{ $module['count'] }} {{ $module['label'] }}</p>@else<p class="mt-3 text-xs font-semibold text-slate-500">{{ $module['label'] }}</p>@endif</div>
+</a>

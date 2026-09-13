@@ -16,6 +16,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AccessControlController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\App;
@@ -52,6 +53,29 @@ Route::middleware('admin')->group(function () {
     Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
 
     Route::get('/audit-logs', [\App\Http\Controllers\AuditLogController::class, 'index'])->name('audit-logs.index');
+});
+
+Route::middleware('access.control')->prefix('access-control')->name('access-control.')->group(function () {
+    Route::get('/', [AccessControlController::class, 'index'])->name('index');
+    Route::get('/guest-cards', [AccessControlController::class, 'guestCards'])->middleware('access.control:guest-cards')->name('guest-cards.index');
+    Route::get('/guest-cards/create', [AccessControlController::class, 'createGuestCard'])->middleware('access.control:guest-cards')->name('guest-cards.create');
+    Route::post('/guest-cards', [AccessControlController::class, 'issueGuestCard'])->middleware('access.control:guest-cards')->name('guest-cards.store');
+    Route::post('/cards/{card}/activate', [AccessControlController::class, 'activateCard'])->middleware('access.control:manage')->name('cards.activate');
+    Route::post('/cards/{card}/suspend', [AccessControlController::class, 'suspendCard'])->middleware('access.control:manage')->name('cards.suspend');
+    Route::post('/cards/{card}/revoke', [AccessControlController::class, 'revokeCard'])->middleware('access.control:manage')->name('cards.revoke');
+    Route::post('/cards/{card}/replace', [AccessControlController::class, 'replaceCard'])->middleware('access.control:manage')->name('cards.replace');
+    Route::get('/employee-cards', [AccessControlController::class, 'employeeCards'])->middleware('access.control:employee-cards')->name('employee-cards.index');
+    Route::get('/employee-cards/create', [AccessControlController::class, 'createEmployeeCard'])->middleware('access.control:employee-cards')->name('employee-cards.create');
+    Route::post('/employee-cards', [AccessControlController::class, 'issueEmployeeCard'])->middleware('access.control:employee-cards')->name('employee-cards.store');
+    Route::get('/events', [AccessControlController::class, 'events'])->middleware('access.control:events')->name('events.index');
+    Route::get('/access-points', [AccessControlController::class, 'accessPoints'])->middleware('access.control:manage')->name('access-points.index');
+    Route::post('/access-points', [AccessControlController::class, 'storeAccessPoint'])->middleware('access.control:manage')->name('access-points.store');
+    Route::get('/restricted-areas', [AccessControlController::class, 'restrictedAreas'])->middleware('access.control:manage')->name('restricted-areas.index');
+    Route::post('/restricted-areas', [AccessControlController::class, 'storeRestrictedArea'])->middleware('access.control:manage')->name('restricted-areas.store');
+    Route::get('/reports', [AccessControlController::class, 'reports'])->middleware('access.control:reports')->name('reports.index');
+    Route::get('/settings', [AccessControlController::class, 'settings'])->middleware('access.control:manage')->name('settings.index');
+    Route::get('/alerts', [AccessControlController::class, 'alerts'])->middleware('access.control:events')->name('alerts.index');
+    Route::post('/alerts/{alert}', [AccessControlController::class, 'updateAlert'])->middleware('access.control:manage')->name('alerts.update');
 });
 
 Route::get('/redirect',[HomeController::class,'redirect']);

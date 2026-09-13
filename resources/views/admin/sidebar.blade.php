@@ -36,6 +36,9 @@
                     </ul>
                 </li>
                 <li><a href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                @if(auth()->check() && in_array(strtolower((string) auth()->user()->role), ['admin', 'manager', 'security_manager', 'reception', 'hr', 'auditor'], true))
+                <li class="{{ request()->routeIs('access-control.*') ? 'active' : '' }}"><a href="{{ route('access-control.index') }}"><i class="fas fa-id-card"></i> <span>Control room</span></a></li>
+                @endif
                 <li><a href="{{ route('pos.index') }}"><i class="fas fa-cash-register"></i> <span>Restaurant / Bar POS</span></a></li>
                 <li class="{{ request()->routeIs('inventory.*') ? 'active' : '' }}"><a href="{{ route('inventory.index') }}"><i class="fas fa-boxes"></i> <span>Inventory</span></a></li>
                 <li class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}"><a href="{{ route('suppliers.index') }}"><i class="fas fa-address-book"></i> <span>Suppliers</span></a></li>
