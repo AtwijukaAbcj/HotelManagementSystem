@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <title>Hotel Dashboard Template</title>
     @include('admin.css')
+    <link
+        rel="stylesheet"
+        href="{{ asset('admin/assets/css/custom.css') }}?v={{ time() }}"
+    >
 
     <style>
         .btn.active {
@@ -72,7 +76,7 @@
                                     <table class="datatable table table-stripped table table-hover table-center mb-0">
                                         <thead>
                                             <tr>
-                                                <th class="datatable sortable" data-column="id">Billing No.</th>
+                                                <th class="datatable sortable" data-column="id">Receipt No.</th>
                                                 <th>Name</th>
                                                 <th>Room Type</th>
                                                 <th>Room Number</th>
@@ -82,6 +86,7 @@
                                                 <th>price</th>
                                                 <th>Total</th>
                                                 <th>Payment method</th>
+                                                <th>Email</th>
                                                 <th class="text-right">Actions</th>
                                             </tr>
                                         </thead>
@@ -89,7 +94,7 @@
 
                                             @foreach($data as $data)
                                             <tr>
-                                                <td>BILL{{ sprintf('%03d', $data->id) }}</td>
+                                                <td>{{ $data->receipt_number ?? 'BILL-' . str_pad((string) $data->id, 6, '0', STR_PAD_LEFT) }}</td>
 
                                                 <td>{{$data->name}}</a> </td>
 
@@ -104,11 +109,12 @@
                                                 <td>{{$data->price}}</td>
                                                 <td>{{$data->total}}</td>
                                                 <td>{{$data->transaction_type}}</td>
+                                                <td>{{ ucfirst(str_replace('_', ' ', $data->receipt_email_status ?? 'not sent')) }}</td>
 
 
                                                 <td class="text-right">
                                                     <div class="dropdown dropdown-action"> <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-v ellipse_color"></i></a>
-                                                        <div class="dropdown-menu dropdown-menu-right"> <a class="dropdown-item" href="{{url ('update_billrecord',$data->id)}}"><i class="fas fa-pencil-alt m-r-5"></i> Edit</a> <a class="dropdown-item" href="{{url('delete_billrecord',$data->id)}}" data-toggle="modal" data-target="#delete_asset"><i class="fas fa-trash-alt m-r-5"></i> Delete</a> </div>
+                                                        <div class="dropdown-menu dropdown-menu-right"> <a class="dropdown-item" href="{{ route('billing.print', $data) }}" target="_blank"><i class="fas fa-receipt m-r-5"></i> Receipt</a> <a class="dropdown-item" href="{{url ('update_billrecord',$data->id)}}"><i class="fas fa-pencil-alt m-r-5"></i> Edit</a> <a class="dropdown-item" href="{{url('delete_billrecord',$data->id)}}" data-toggle="modal" data-target="#delete_asset"><i class="fas fa-trash-alt m-r-5"></i> Delete</a> </div>
                                                     </div>
                                                 </td>
                                             </tr>

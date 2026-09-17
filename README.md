@@ -78,6 +78,16 @@ Contributions are welcome! Feel free to fork the repository and submit pull requ
    - Email: `admin@gmail.com`
    - Password: `admin123`
 
+### Receipt email delivery
+
+Receipts and payment copies use the guest or payer email saved on the document. Configure the SMTP server in `.env` using `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_ENCRYPTION`, `MAIL_FROM_ADDRESS`, and `MAIL_FROM_NAME`, then run:
+
+```bash
+php artisan config:clear
+```
+
+The property settings page controls the receipt branding and footer. SMTP credentials stay in `.env` and are not stored in the database.
+
 
 
 ### 🌟star to the repository is appreciated

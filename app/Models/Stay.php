@@ -32,4 +32,9 @@ class Stay extends Model
     {
         return $this->belongsTo(Guest::class);
     }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 }

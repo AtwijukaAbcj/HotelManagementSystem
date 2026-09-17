@@ -24,6 +24,11 @@ class Guest extends Model
         return $this->hasMany(Stay::class);
     }
 
+    public function posOrders()
+    {
+        return $this->hasMany(PosOrder::class);
+    }
+
     public function getFullNameAttribute(): string
     {
         return trim($this->first_name . ' ' . $this->last_name);

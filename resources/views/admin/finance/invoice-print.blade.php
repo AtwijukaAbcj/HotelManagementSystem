@@ -46,6 +46,9 @@
                 <div class="col-sm-6">
                     <small class="text-muted d-block">BILL TO</small>
                     <strong>{{ $invoice->guest_name }}</strong>
+                    @if($invoice->receipt_email)
+                        <small class="text-muted d-block">{{ $invoice->receipt_email }}</small>
+                    @endif
                 </div>
                 <div class="col-sm-3">
                     <small class="text-muted d-block">DATE</small>
@@ -62,15 +65,16 @@
                     <tr><th>Description</th><th class="text-right">Amount</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Hotel services</td><td class="text-right">${{ number_format($invoice->amount, 2) }}</td></tr>
+                    <tr><td>Hotel services</td><td class="text-right">UGX {{ number_format($invoice->amount, 2) }}</td></tr>
                 </tbody>
             </table>
 
             <div class="invoice-total d-flex justify-content-between">
                 <span>Total due</span>
-                <span>${{ number_format($invoice->amount, 2) }}</span>
+                <span>UGX {{ number_format($invoice->amount, 2) }}</span>
             </div>
             <div class="mt-4"><strong>Payment method:</strong> {{ str_replace('_', ' ', $invoice->payment_method) }}</div>
+            <div class="mt-3"><strong>Receipt email status:</strong> {{ ucfirst(str_replace('_', ' ', $invoice->receipt_email_status ?? 'not sent')) }}</div>
             @if ($invoice->notes)
                 <div class="mt-3 text-muted"><strong>Notes:</strong> {{ $invoice->notes }}</div>
             @endif

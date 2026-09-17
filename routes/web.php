@@ -46,12 +46,15 @@ Route::middleware('admin')->group(function () {
     Route::post('/role-management', [RoleController::class, 'store'])->name('admin.roles.store');
     Route::get('/user-management', [RoleController::class, 'users'])->name('admin.users');
     Route::put('/user-management/{user}/role', [RoleController::class, 'update'])->name('admin.roles.update');
+    Route::put('/user-management/{user}/properties', [RoleController::class, 'updateProperties'])->name('admin.users.updateProperties');
     Route::get('/role-management/permissions', [RoleController::class, 'permissions'])->name('admin.roles.permissions');
     Route::put('/role-management/permissions/{role}', [RoleController::class, 'updatePermissions'])->name('admin.roles.permissions.update');
 
     Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
+    Route::get('/properties/{property}/edit', [PropertyController::class, 'edit'])->name('properties.edit');
     Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
+    Route::put('/properties/{property}', [PropertyController::class, 'update'])->name('properties.update');
     Route::get('/properties/dashboard', [PropertyController::class, 'dashboard'])->name('properties.dashboard');
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications', [NotificationController::class, 'send'])->name('notifications.send');
@@ -91,10 +94,12 @@ Route::get('/edit_profile',[AdminController::class,'edit_profile']);
 
 Route::get('form/allbooking',[BookingController::class,'allbooking']);
 Route::get('form/addbooking',[BookingController::class,'addbooking']);
+Route::post('form/booking/guest-details',[BookingController::class,'storeGuestDetails'])->name('booking.guest-details');
+Route::get('form/booking/room-details',[BookingController::class,'roomDetails'])->name('booking.room-details');
 Route::post('form/savebooking',[BookingController::class,'saveRecord']);
 Route::get('/delete_record/{id}',[BookingController::class,'deleterecord'])->name('delete_record');
-Route::get('/update_record/{id}', [BookingController::class, 'updaterecord'])->name('update_record');
-Route::put('/update_data_confirm/{id}', [BookingController::class, 'update_data_confirm'])->name('update_data_confirm');
+Route::get('/update_record/{id}', [BookingController::class, 'updaterecord'])->whereNumber('id')->name('update_record');
+Route::put('/update_data_confirm/{id}', [BookingController::class, 'update_data_confirm'])->whereNumber('id')->name('update_data_confirm');
 
 Route::post('/update-status/{id}', [BookingController::class, 'updateStatus'])->name('update-status');
 
@@ -105,7 +110,8 @@ Route::get('form/customers',[BookingController::class,'customers']);
 
 Route::get('/all_rooms',[RoomController::class,'allrooms']);
 Route::get('/form/allrooms',[RoomController::class,'allrooms']);
-Route::get('/edit_rooms',[RoomController::class,'editrooms']);
+Route::get('/editrooms/{id}',[RoomController::class,'editrooms'])->whereNumber('id');
+Route::put('/editrooms/{id}',[RoomController::class,'updateRoom'])->whereNumber('id')->name('rooms.update');
 Route::get('/add_rooms',[RoomController::class,'addrooms']);
 Route::post('/save_rooms',[RoomController::class,'saveRoom']);
 Route::get('/delete_record1/{id}',[RoomController::class,'deleterecord1']);
@@ -122,6 +128,8 @@ Route::get('/guests/create', [GuestController::class, 'create'])->name('guests.c
 Route::post('/guests', [GuestController::class, 'store'])->name('guests.store');
 
 Route::get('/pos', [PosController::class, 'index'])->name('pos.index');
+Route::get('/pos/purchases', [PosController::class, 'purchases'])->name('pos.purchases');
+Route::get('/pos/receipt/{order}', [PosController::class, 'receipt'])->name('pos.receipt');
 Route::post('/pos', [PosController::class, 'store'])->name('pos.store');
 Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create');
@@ -143,6 +151,8 @@ Route::post('/purchases/{purchase}/receive', [InventoryController::class, 'recei
 
 Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
 Route::get('/payments', [FinanceController::class, 'payments'])->name('payments.index');
+Route::get('/payments/create', [FinanceController::class, 'createPayment'])->name('payments.create');
+Route::get('/payments/{payment}/print', [FinanceController::class, 'printPayment'])->name('payments.print');
 Route::post('/payments', [FinanceController::class, 'storePayment'])->name('payments.store');
 Route::get('/invoices', [FinanceController::class, 'invoices'])->name('invoices.index');
 Route::get('/invoices/create', [FinanceController::class, 'createInvoice'])->name('invoices.create');
@@ -178,6 +188,7 @@ Route::post('/check_store',[CheckController::class,'CheckStore']);
 
 
 Route::get('/billing',[BillingController::class,'billing']);
+Route::get('/billing/{billing}/print', [BillingController::class, 'printBill'])->name('billing.print');
 Route::post('/savebill',[BillingController::class,'savebill']);
 Route::get('/billing_report',[BillingController::class,'billing_report']);
 Route::get('/delete_billrecord/{id}',[BillingController::class,'deletebillrecord']);

@@ -37,12 +37,25 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 col-lg-4 form-group">
+                                <label for="guest_id">Guest profile</label>
+                                <select id="guest_id" name="guest_id" class="form-control">
+                                    <option value="">Manual / walk-in payer</option>
+                                    @foreach($guests as $guest)
+                                        <option value="{{ $guest->id }}" data-name="{{ $guest->full_name }}" data-email="{{ $guest->email }}" @selected(old('guest_id') == $guest->id)>{{ $guest->full_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 col-lg-4 form-group">
                                 <label for="guest_name">Guest name</label>
                                 <input id="guest_name" type="text" name="guest_name" class="form-control" value="{{ old('guest_name') }}" required autofocus>
                             </div>
                             <div class="col-md-6 col-lg-4 form-group">
+                                <label for="receipt_email">Receipt email</label>
+                                <input id="receipt_email" type="email" name="receipt_email" class="form-control" value="{{ old('receipt_email') }}" placeholder="guest@example.com">
+                            </div>
+                            <div class="col-md-6 col-lg-4 form-group">
                                 <label for="invoice_number">Invoice number</label>
-                                <input id="invoice_number" type="text" name="invoice_number" class="form-control" value="{{ old('invoice_number') }}" required>
+                                <input id="invoice_number" type="text" class="form-control" value="Auto-generated" disabled>
                             </div>
                             <div class="col-md-6 col-lg-4 form-group">
                                 <label for="amount">Amount</label>
@@ -80,5 +93,12 @@
     </div>
 </div>
 @include('admin.script')
+<script>
+    document.getElementById('guest_id')?.addEventListener('change', function () {
+        const option = this.options[this.selectedIndex];
+        document.getElementById('guest_name').value = option?.dataset?.name || '';
+        document.getElementById('receipt_email').value = option?.dataset?.email || '';
+    });
+</script>
 </body>
 </html>
